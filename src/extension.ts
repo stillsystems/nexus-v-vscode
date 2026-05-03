@@ -1,9 +1,12 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
+import { NexusBridge } from './bridge';
 
 export function activate(context: vscode.ExtensionContext) {
-    const controlProvider = new NexusControlProvider();
+    const bridge = new NexusBridge();
+    const controlProvider = new NexusControlProvider(bridge);
+    
     vscode.window.registerTreeDataProvider('nexusv.dashboard', controlProvider);
 
     context.subscriptions.push(
@@ -19,7 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     const disposable = vscode.commands.registerCommand('nexus-v.createProject', () => {
-        // ... (existing code remains)
         const panel = vscode.window.createWebviewPanel(
             'nexusVScaffolder',
             'Nexus-V: New Project',
@@ -32,13 +34,41 @@ export function activate(context: vscode.ExtensionContext) {
 
         panel.webview.html = getWebviewContent(context, panel.webview);
 
-        // Handle messages from the webview
         panel.webview.onDidReceiveMessage(
-            (message: any) => {
+            async (message: any) => {
                 switch (message.command) {
+                    case 'browse':
+                        const folders = await vscode.window.showOpenDialog({
+                            canSelectFolders: true,
+                            canSelectFiles: false,
+                            canSelectMany: false,
+                            openLabel: 'Select Project Location'
+                        });
+                        if (folders && folders.length > 0) {
+                            panel.webview.postMessage({ command: 'setTargetDir', path: folders[0].fsPath });
+                        }
+                        return;
                     case 'generate':
-                        vscode.window.showInformationMessage(`Generating project: ${message.data.name}...`);
-                        // In a production version, we would spawn the nexus-v binary here
+                        try {
+                            panel.webview.postMessage({ command: 'generationStarted' });
+                            await bridge.scaffold({
+                                name: message.data.name,
+                                identifier: message.data.identifier,
+                                publisher: message.data.publisher,
+                                description: message.data.description,
+                                variant: message.data.template,
+                                targetDir: message.data.targetDir
+                            });
+                            panel.webview.postMessage({ command: 'generationComplete', path: message.data.targetDir });
+                            
+                            const action = await vscode.window.showInformationMessage('Project generated successfully!', 'Open Folder');
+                            if (action === 'Open Folder') {
+                                vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.file(message.data.targetDir));
+                            }
+                        } catch (err: any) {
+                            panel.webview.postMessage({ command: 'generationFailed', error: err.message });
+                            vscode.window.showErrorMessage(`Generation failed: ${err.message}`);
+                        }
                         return;
                 }
             },
@@ -54,15 +84,12 @@ function getWebviewContent(context: vscode.ExtensionContext, webview: vscode.Web
     const htmlPath = path.join(context.extensionPath, 'media', 'index.html');
     let html = fs.readFileSync(htmlPath, 'utf8');
 
-    // Get URIs for local resources
     const styleUri = webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, 'media', 'style.css')));
     const scriptUri = webview.asWebviewUri(vscode.Uri.file(path.join(context.extensionPath, 'media', 'app.js')));
 
-    // Replace relative paths with Webview URIs
     html = html.replace('href="style.css"', `href="${styleUri}"`);
     html = html.replace('src="app.js"', `src="${scriptUri}"`);
 
-    // Add VS Code API acquire snippet
     html = html.replace('</head>', `
         <script>
             const vscode = acquireVsCodeApi();
@@ -78,6 +105,20 @@ export function deactivate() {}
 class NexusControlProvider implements vscode.TreeDataProvider<NexusItem> {
     private _onDidChangeTreeData: vscode.EventEmitter<NexusItem | undefined | void> = new vscode.EventEmitter<NexusItem | undefined | void>();
     readonly onDidChangeTreeData: vscode.Event<NexusItem | undefined | void> = this._onDidChangeTreeData.event;
+    private engineVersion: string = 'v0.2.2';
+
+    constructor(private bridge: NexusBridge) {
+        this.updateVersion();
+    }
+
+    private async updateVersion() {
+        const fullVersion = await this.bridge.getVersion();
+        const match = fullVersion.match(/(\d+\.\d+\.\d+)/);
+        if (match) {
+            this.engineVersion = 'v' + match[1];
+            this.refresh();
+        }
+    }
 
     refresh(): void {
         this._onDidChangeTreeData.fire();
@@ -93,7 +134,7 @@ class NexusControlProvider implements vscode.TreeDataProvider<NexusItem> {
         } else {
             return Promise.resolve([
                 new NexusItem('Project Status', vscode.TreeItemCollapsibleState.Expanded, 'dashboard', [
-                    new NexusItem('Engine: v0.2.8', vscode.TreeItemCollapsibleState.None, 'check'),
+                    new NexusItem(`Engine: ${this.engineVersion}`, vscode.TreeItemCollapsibleState.None, 'check'),
                     new NexusItem('Health: Perfect', vscode.TreeItemCollapsibleState.None, 'shield')
                 ]),
                 new NexusItem('Quick Actions', vscode.TreeItemCollapsibleState.Expanded, 'zap', [

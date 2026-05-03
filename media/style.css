@@ -141,6 +141,36 @@ textarea {
     transform: translateY(0);
 }
 
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.browse-group {
+    display: flex;
+    gap: 12px;
+}
+
+.browse-group input {
+    flex: 1;
+}
+
+.secondary-btn {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--border);
+    padding: 0 20px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.secondary-btn:hover {
+    background: var(--border);
+    border-color: var(--text-dim);
+}
+
 #status-panel {
     margin-top: 24px;
     padding: 16px;

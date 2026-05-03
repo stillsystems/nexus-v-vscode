@@ -30,10 +30,20 @@
                     <label for="publisher">Publisher</label>
                     <input type="text" id="publisher" placeholder="stillsystems">
                 </div>
+                <div class="input-group full-width">
+                    <label for="target-dir">Target Location</label>
+                    <div class="browse-group">
+                        <input type="text" id="target-dir" placeholder="/path/to/project">
+                        <button id="browse-btn" class="secondary-btn">Browse...</button>
+                    </div>
+                </div>
                 <div class="input-group">
                     <label for="template">Template</label>
                     <select id="template">
-                        <option value="default">Default (Command)</option>
+                        <option value="command">Command</option>
+                        <option value="webview">Webview</option>
+                        <option value="language">Language</option>
+                        <option value="theme">Theme</option>
                     </select>
                 </div>
             </section>

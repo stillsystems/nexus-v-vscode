@@ -21,13 +21,13 @@
     "productivity",
     "automation"
   ],
-  "homepage": "https://github.com/stillsystems/nexus-v",
+  "homepage": "https://github.com/stillsystems/nexus-v-vscode",
   "repository": {
     "type": "git",
-    "url": "https://github.com/stillsystems/nexus-v"
+    "url": "https://github.com/stillsystems/nexus-v-vscode"
   },
   "bugs": {
-    "url": "https://github.com/stillsystems/nexus-v/issues"
+    "url": "https://github.com/stillsystems/nexus-v-vscode/issues"
   },
   "icon": "icon.png",
   "galleryBanner": {
