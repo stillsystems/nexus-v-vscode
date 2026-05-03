@@ -1,0 +1,20 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+      - run: npm ci
+      - name: Publish to VS Code Marketplace
+        run: npx vsce publish -p ${{ secrets.VSCE_TOKEN }}
+      - name: Publish to Open VSX
+        run: npx ovsx publish -p ${{ secrets.OVSX_TOKEN }}
+        continue-on-error: true
