@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus-V | Visual Scaffolder</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div class="glass-container">
+        <header>
+            <div class="logo">🧱 Still Systems <span>NEXUS-V</span></div>
+            <p class="subtitle">Next-Gen Extension Scaffolding Engine</p>
+        </header>
+
+        <main>
+            <section class="config-grid">
+                <div class="input-group">
+                    <label for="name">Project Name</label>
+                    <input type="text" id="name" placeholder="My Awesome Extension">
+                </div>
+                <div class="input-group">
+                    <label for="identifier">Identifier</label>
+                    <input type="text" id="identifier" placeholder="my-extension">
+                </div>
+                <div class="input-group">
+                    <label for="publisher">Publisher</label>
+                    <input type="text" id="publisher" placeholder="stillsystems">
+                </div>
+                <div class="input-group">
+                    <label for="template">Template</label>
+                    <select id="template">
+                        <option value="default">Default (Command)</option>
+                    </select>
+                </div>
+            </section>
+
+            <section class="description-area">
+                <label for="description">Description</label>
+                <textarea id="description" placeholder="A brief description of your project..."></textarea>
+            </section>
+
+            <footer class="actions">
+                <button id="generate-btn" class="primary-btn">Generate Project</button>
+            </footer>
+
+            <div id="status-panel" class="hidden">
+                <p id="status-text"></p>
+            </div>
+        </main>
+    </div>
+
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

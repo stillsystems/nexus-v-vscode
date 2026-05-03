@@ -1,0 +1,86 @@
+{
+  "name": "nexus-v-vscode",
+  "displayName": "Nexus-V for VS Code",
+  "publisher": "stillsystems",
+  "description": "Official VS Code extension for the Nexus-V scaffolding engine.",
+  "version": "0.2.10",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.92.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "nexus",
+    "scaffolding",
+    "boilerplate",
+    "templates",
+    "productivity",
+    "automation"
+  ],
+  "homepage": "https://github.com/stillsystems/nexus-v",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stillsystems/nexus-v"
+  },
+  "bugs": {
+    "url": "https://github.com/stillsystems/nexus-v/issues"
+  },
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#111827",
+    "theme": "dark"
+  },
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "nexus-v.createProject",
+        "title": "Nexus-V: New Project",
+        "category": "Still Systems"
+      },
+      {
+        "command": "nexus-v.runDoctor",
+        "title": "Nexus-V: Run Doctor",
+        "category": "Still Systems"
+      },
+      {
+        "command": "nexusv.refresh",
+        "title": "Refresh",
+        "icon": "$(refresh)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "nexus-v-explorer",
+          "title": "Nexus-V",
+          "icon": "$(rocket)"
+        }
+      ]
+    },
+    "views": {
+      "nexus-v-explorer": [
+        {
+          "id": "nexusv.dashboard",
+          "name": "Project Control"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "test": "echo \"No tests yet\""
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.0.0"
+  }
+}
