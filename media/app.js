@@ -47,13 +47,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       item.className = 'template-item';
       if (selectedTemplate && selectedTemplate.id === tpl.id) item.classList.add('active');
       
-      item.innerHTML = `
-        <div class="template-info">
-          <h4>${tpl.name}</h4>
-          <p>${tpl.language || 'Multi-purpose'}</p>
-        </div>
-        <div style="font-size: 1.2rem;">🧱</div>
-      `;
+      const info = document.createElement('div');
+      info.className = 'template-info';
+      
+      const name = document.createElement('h4');
+      name.textContent = tpl.name;
+      
+      const lang = document.createElement('p');
+      lang.textContent = tpl.language || 'Multi-purpose';
+      
+      info.appendChild(name);
+      info.appendChild(lang);
+      
+      const icon = document.createElement('div');
+      icon.style.fontSize = '1.2rem';
+      icon.textContent = '🧱';
+
+      item.appendChild(info);
+      item.appendChild(icon);
 
       item.onclick = () => selectTemplate(tpl);
       templateList.appendChild(item);
