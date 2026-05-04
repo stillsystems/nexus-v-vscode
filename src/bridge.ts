@@ -67,4 +67,28 @@ export class NexusBridge {
             });
         });
     }
+
+    public async listTemplates(): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+            // We use the search command to get registry templates as well
+            cp.exec("nexus-v search --json", (err, stdout) => {
+                if (err) {
+                    // Fallback to basic local list if search fails
+                    cp.exec("nexus-v list", (err, stdout) => {
+                        if (err) reject(err);
+                        else {
+                            const lines = stdout.split('\n').filter(l => l.startsWith('  -')).map(l => l.replace('  - ', '').trim());
+                            resolve(lines.map(name => ({ id: name, name: name, language: 'Local' })));
+                        }
+                    });
+                } else {
+                    try {
+                        resolve(JSON.parse(stdout));
+                    } catch (e) {
+                        reject(e);
+                    }
+                }
+            });
+        });
+    }
 }

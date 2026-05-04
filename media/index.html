@@ -1,73 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexus-V | Visual Scaffolder</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus-V | Visual Scaffolder</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="dark-mode">
-    <div class="glass-container">
-        <header>
-            <div class="logo">🧱 Still Systems <span>NEXUS-V</span></div>
-            <p class="subtitle">Next-Gen Extension Scaffolding Engine</p>
-        </header>
+<body>
+  <div class="bg-glow"></div>
+  <div class="container">
+    <header>
+      <h1 class="animate-in">NEXUS-V</h1>
+      <p class="animate-in" style="animation-delay: 0.1s">Visual Scaffolding Engine</p>
+    </header>
 
-        <main>
-            <section class="config-grid">
-                <div class="input-group">
-                    <label for="name">Project Name</label>
-                    <input type="text" id="name" placeholder="My Awesome Extension">
-                </div>
-                <div class="input-group">
-                    <label for="identifier">Identifier</label>
-                    <input type="text" id="identifier" placeholder="my-extension">
-                </div>
-                <div class="input-group">
-                    <label for="publisher">Publisher</label>
-                    <input type="text" id="publisher" placeholder="stillsystems">
-                </div>
-                <div class="input-group full-width">
-                    <label for="target-dir">Target Location</label>
-                    <div class="browse-group">
-                        <input type="text" id="target-dir" placeholder="/path/to/project">
-                        <button id="browse-btn" class="secondary-btn">Browse...</button>
-                    </div>
-                </div>
-                <div class="input-group">
-                    <label for="template">Template</label>
-                    <select id="template">
-                        <option value="command">Command</option>
-                        <option value="webview">Webview</option>
-                        <option value="language">Language</option>
-                        <option value="theme">Theme</option>
-                    </select>
-                </div>
-            </section>
+    <div class="grid animate-in" style="animation-delay: 0.2s">
+      <!-- Left Column: Template Selection -->
+      <div class="glass-card">
+        <div class="section-title">Select Template</div>
+        <div id="template-list" class="template-list">
+          <!-- Populated by JS -->
+          <div style="color: var(--muted); font-size: 0.9rem;">Loading templates...</div>
+        </div>
 
-            <section class="description-area">
-                <label for="description">Description</label>
-                <textarea id="description" placeholder="A brief description of your project..."></textarea>
-            </section>
+        <div id="features-section" style="display: none; margin-top: 2rem;">
+          <div class="section-title">Customize Features</div>
+          <div id="features-grid" class="features-grid">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
 
-            <footer class="actions">
-                <button id="generate-btn" class="primary-btn">Generate Project</button>
-            </footer>
-
-            <div id="status-panel" class="hidden">
-                <p id="status-text"></p>
+      <!-- Right Column: Project Configuration -->
+      <div class="glass-card">
+        <div class="section-title">Project Configuration</div>
+        <form id="gen-form">
+          <div class="input-group">
+            <label for="name">Display Name</label>
+            <input type="text" id="name" placeholder="e.g. My Cool Extension" required>
+          </div>
+          <div class="input-group">
+            <label for="identifier">Project ID (folder name)</label>
+            <div style="display: flex; gap: 0.5rem;">
+              <input type="text" id="identifier" placeholder="e.g. my-cool-ext" required>
+              <button type="button" id="browse-btn" class="btn-secondary" style="width: auto; white-space: nowrap; display: none;">Browse</button>
             </div>
-        </main>
-    </div>
+          </div>
+          <div class="input-group">
+            <label for="publisher">Publisher</label>
+            <input type="text" id="publisher" placeholder="stillsystems">
+          </div>
+          <div class="input-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" placeholder="A brief summary of your project">
+          </div>
 
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+          <button type="submit" class="btn-primary">Generate Project</button>
+        </form>
 
-    <script src="app.js"></script>
+        <div id="status"></div>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>

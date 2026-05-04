@@ -34,6 +34,13 @@ export function activate(context: vscode.ExtensionContext) {
 
         panel.webview.html = getWebviewContent(context, panel.webview);
 
+        // Fetch and send templates
+        bridge.listTemplates().then(templates => {
+            panel.webview.postMessage({ command: 'setTemplates', data: templates });
+        }).catch(err => {
+            console.error('Failed to load templates:', err);
+        });
+
         panel.webview.onDidReceiveMessage(
             async (message: any) => {
                 switch (message.command) {
