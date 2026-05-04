@@ -36,15 +36,15 @@ export class NexusBridge {
         return new Promise((resolve, reject) => {
             const proc = cp.spawn("nexus-v", args);
 
-            proc.stdout.on('data', (data) => {
+            proc.stdout.on('data', (data: Buffer) => {
                 this.outputChannel.append(data.toString());
             });
 
-            proc.stderr.on('data', (data) => {
+            proc.stderr.on('data', (data: Buffer) => {
                 this.outputChannel.append(`[ERROR] ${data.toString()}`);
             });
 
-            proc.on('close', (code) => {
+            proc.on('close', (code: number) => {
                 if (code === 0) {
                     this.outputChannel.appendLine("\n✅ Project generated successfully!");
                     resolve();
@@ -58,7 +58,7 @@ export class NexusBridge {
 
     public async getVersion(): Promise<string> {
         return new Promise((resolve) => {
-            cp.exec("nexus-v version", (err, stdout) => {
+            cp.exec("nexus-v version", (err: any, stdout: string) => {
                 if (err) {
                     resolve("unknown");
                 } else {
@@ -71,14 +71,14 @@ export class NexusBridge {
     public async listTemplates(): Promise<any[]> {
         return new Promise((resolve, reject) => {
             // We use the search command to get registry templates as well
-            cp.exec("nexus-v search --json", (err, stdout) => {
+            cp.exec("nexus-v search --json", (err: any, stdout: string) => {
                 if (err) {
                     // Fallback to basic local list if search fails
-                    cp.exec("nexus-v list", (err, stdout) => {
+                    cp.exec("nexus-v list", (err: any, stdout: string) => {
                         if (err) reject(err);
                         else {
-                            const lines = stdout.split('\n').filter(l => l.startsWith('  -')).map(l => l.replace('  - ', '').trim());
-                            resolve(lines.map(name => ({ id: name, name: name, language: 'Local' })));
+                            const lines = stdout.split('\n').filter((l: string) => l.startsWith('  -')).map((l: string) => l.replace('  - ', '').trim());
+                            resolve(lines.map((name: string) => ({ id: name, name: name, language: 'Local' })));
                         }
                     });
                 } else {
