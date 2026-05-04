@@ -34,6 +34,13 @@ export function activate(context: vscode.ExtensionContext) {
 
         panel.webview.html = getWebviewContent(context, panel.webview);
 
+        // Fetch and send templates
+        bridge.listTemplates().then(templates => {
+            panel.webview.postMessage({ command: 'setTemplates', data: templates });
+        }).catch((err: any) => {
+            vscode.window.showErrorMessage(`Failed to load templates: ${err}`);
+        });
+
         panel.webview.onDidReceiveMessage(
             async (message: any) => {
                 switch (message.command) {
@@ -128,7 +135,7 @@ class NexusControlProvider implements vscode.TreeDataProvider<NexusItem> {
         return element;
     }
 
-    getChildren(element?: NexusItem): Thenable<NexusItem[]> {
+    getChildren(element?: NexusItem): vscode.ProviderResult<NexusItem[]> {
         if (element) {
             return Promise.resolve(element.children || []);
         } else {
@@ -162,7 +169,7 @@ class NexusItem extends vscode.TreeItem {
     ) {
         super(label, collapsibleState);
         if (iconName) {
-            this.iconPath = new vscode.ThemeIcon(iconName);
+            (this as any).iconPath = new vscode.ThemeIcon(iconName);
         }
     }
     contextValue = 'nexusItem';
