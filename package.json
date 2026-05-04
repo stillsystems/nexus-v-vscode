@@ -3,7 +3,7 @@
   "displayName": "Nexus-V for VS Code",
   "publisher": "stillsystems",
   "description": "Official VS Code extension for the Nexus-V scaffolding engine.",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "license": "MIT",
   "engines": {
     "vscode": "^1.92.0"
